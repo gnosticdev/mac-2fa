@@ -15,7 +15,7 @@ MacOS stores a copy of all iMessages and SMS messages from icloud (if enabled) i
 ## I like bun, and I cannot lie
 
 -   Uses [`Bun`](https://bun.sh) instead of Node bc no one should use node if they dont have to.
--   Uses [drizzle-orm](https://orm.drizzle.team/) as a type-safe query builder, and bc I like to over engineer simple things.
+-   Uses [`drizzle-orm`](https://orm.drizzle.team/) as a type-safe query builder, and bc I like to over engineer simple things.
 -   Makes internet browsing much less secure, the way it was intended.
 -   No build step, run the .ts file with bun directly
 
