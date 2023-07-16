@@ -28,7 +28,7 @@ curl -fsSL https://bun.sh/install | bash
 1. clone the repo
 
 ```sh
-git clone https://github.com/ninxadev/mac-messages.git
+git clone https://github.com/ninxadev/mac-2fa.git
 ```
 
 2. run the script in your terminal or in your editor.
