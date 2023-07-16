@@ -13,7 +13,7 @@
         "allowImportingTsExtensions": true,
         "moduleDetection": "force",
         "noEmit": true,
-
+        "resolveJsonModule": true,
         "allowJs": true, // allow importing `.js` from `.ts`
         "esModuleInterop": true, // allow default imports for CommonJS modules
 

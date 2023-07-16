@@ -1,11 +1,9 @@
 {
     "name": "2fa-messages-mac",
     "private": true,
-    "bin": {
-        "copy-2fa": "./src/index.ts"
-    },
     "scripts": {
-        "get-code": "bun run ./src/index.ts"
+        "get-code": "bun run ./src/get2fa.ts",
+        "build-binary": "bun build ./src/cli.ts --compile --outfile copy2fa"
     },
     "dependencies": {
         "drizzle-orm": "^0.27.2"

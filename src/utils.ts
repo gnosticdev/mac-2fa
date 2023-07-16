@@ -33,3 +33,16 @@ export const objectEntries = <Obj extends Record<string, unknown>>(
     type Tuple = { [K in KeyofObj]: [K, Obj[K]] }[KeyofObj]
     return Object.entries(obj) as Tuple[]
 }
+
+// generate raw SQL for a given query by replacing the placeholders with the values
+export const generateSQL = (sqlObject: {
+    sql: string
+    params: (string | number)[]
+}) => {
+    const { sql, params } = sqlObject
+    let sqlString = sql
+    params.forEach((param) => {
+        sqlString = sqlString.replace('?', `"${param}"`)
+    })
+    return sqlString
+}

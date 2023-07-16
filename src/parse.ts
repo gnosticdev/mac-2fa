@@ -1,7 +1,7 @@
 export function parseAttributedBody(attributedBody: Uint8Array) {
-    // Find the position of the NSString marker in the data
+    // message text is found after the NSString marker, so lets find that first
     const marker = Buffer.from('NSString')
-    const position = attributedBody.findIndex((byte, index) =>
+    const position = attributedBody.findIndex((_, index) =>
         // Check if the next 8 bytes match the marker
         marker.every((val, i) => attributedBody[index + i] === val)
     )
@@ -11,12 +11,13 @@ export function parseAttributedBody(attributedBody: Uint8Array) {
 
     // Strip off data before the NSString marker
     let textData = attributedBody.slice(position + marker.length)
-    // Strip off the 5-byte preamble
+    // Strip off the 5-bytes of useless data between the marker and the message text
     textData = textData.slice(5)
 
     // Check the first byte
     const firstByte = textData[0]
-    let textLength
+    if (!firstByte) throw new Error('Could not find first byte of text data')
+    let textLength = 0
     // If the first byte is 0x80, the length is stored in the next byte
     if (firstByte === 0x81) {
         // If the first byte is 0x81, the length is stored in the next 2 bytes
