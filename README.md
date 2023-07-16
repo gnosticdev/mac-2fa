@@ -66,7 +66,3 @@ add a `ignore.json` file to the root, and a `ignoredNumbers` property with an ar
 
 -   [imessage exporter](https://github.com/ReagentX/imessage-exporter) - the magnum opus.
 -   [imessage reader](https://github.com/niftycode/imessage_reader) - also very cool.
-
-```
-
-```

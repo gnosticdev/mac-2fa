@@ -1,6 +1,6 @@
 # Duh
 .env
-
+copy2fa
 # Dependency directory
 node_modules
 
