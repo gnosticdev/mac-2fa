@@ -1,0 +1,11 @@
+# Duh
+.env
+
+# Dependency directory
+node_modules
+
+# VS Code files
+.vscode
+
+# Mac files
+.DS_Store

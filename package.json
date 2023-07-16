@@ -1,0 +1,22 @@
+{
+    "name": "2fa-messages-mac",
+    "private": true,
+    "bin": {
+        "copy-2fa": "./src/index.ts"
+    },
+    "scripts": {
+        "get-code": "bun run ./src/index.ts"
+    },
+    "dependencies": {
+        "drizzle-orm": "^0.27.2"
+    },
+    "devDependencies": {
+        "bun-types": "^0.6.14"
+    },
+    "trustedDependencies": [
+        "better-sqlite3"
+    ],
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    }
+}
