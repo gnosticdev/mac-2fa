@@ -4,20 +4,22 @@ _Apple users just got even lazier_
 
 ## Copy 2fa codes from Messages app into your clipboard
 
-😩 Mac users know the absolute dread of actually having to click on a 2fa text notification, open the Messages app, then manually copy and paste my code into my browser
+### Pain
 
-😀 Mac stores a copy of all iMessages and SMS messages in a database (assuming you have the option enabled on your machine.)
+Mac users know the absolute dread of actually having to click on a 2fa text notification, open the Messages app, then manually copy and paste my code into my browser
 
-### I like bun, and I cannot lie
+### Solution
+
+MacOS stores a copy of all iMessages and SMS messages from icloud (if enabled) in an sqlite database on disk 😀
+
+## I like bun, and I cannot lie
 
 -   Uses [`Bun`](https://bun.sh) instead of Node bc no one should use node if they dont have to.
 -   Uses [drizzle-orm](https://orm.drizzle.team/) as a type-safe query builder, and bc I like to over engineer simple things.
 -   Makes internet browsing much less secure, the way it was intended.
 -   No build step, run the .ts file with bun directly
 
-_Note_ You can also extract the raw sql by using the `toSQL()` method in drizzle
-
-### First things first
+## First things first
 
 0. install bun (if you dont have it already)
 
@@ -41,3 +43,8 @@ bun run src/index.ts | pbcopy
 
 3. the most recent 2fa code is copied to your clipboard via pbcopy
 4. use this command inside of Automator or Shortcuts or Keyboard Maestro to quickly and easily get those pesky 2fa codes from your mac into your clipboard.
+
+## Notes
+
+-   You might need to use absolute paths for bun and the script if you are running from another app.
+-   You can also extract the raw sql by using the `toSQL()` method in drizzle.
