@@ -4,7 +4,9 @@ _Apple users just got even lazier_
 
 ## Copy 2fa codes from Messages app into your clipboard
 
-I know it sounds petty, but I really don't like having to click into my 2fa notification, open the Messages app, then manually copy and paste my code into my browser. After some research, I found out that Mac stores a copy of all iMessages and SMS messages in a database (assuming you have the option enabled on your machine.)
+😩 Mac users know the absolute dread of actually having to click on a 2fa text notification, open the Messages app, then manually copy and paste my code into my browser
+
+😀 Mac stores a copy of all iMessages and SMS messages in a database (assuming you have the option enabled on your machine.)
 
 ### I like bun, and I cannot lie
 
