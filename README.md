@@ -4,12 +4,16 @@ Mac users know the absolute dread of actually having to click on a 2fa text noti
 
 Luckily, MacOS stores a copy of all iMessages and SMS messages from icloud (if enabled) in an sqlite database on disk, so we can make a script to get those 2fa messages without needing to access the Messages app.
 
-## I like bun, and I cannot lie
+## Features
+
+-   Gets the most recent 2fa code from the Messages app (searches for 5-7 digit number from 5-6 digit phone numbers)
+-   Ignores messages from phone numbers you specify
+-   Can be used in any workflow app that can run a shell script
+
+### I like bun, and I cannot lie
 
 -   Uses [`Bun`](https://bun.sh) instead of Node bc no one should use node if they dont have to.
 -   Uses [`drizzle-orm`](https://orm.drizzle.team/) as a type-safe query builder, and bc I like to over engineer simple things.
--   Can run as a binary file, so you can use it in any workflow app you want.
--   Uses mac's native sqlite3 library
 
 ## Requirements
 

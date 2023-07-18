@@ -26,15 +26,16 @@ export const convertAppleTimestamp = (appleTimestamp: string | number) => {
     return date.toLocaleString()
 }
 
-export const objectEntries = <Obj extends Record<string, unknown>>(
-    obj: Obj
-) => {
-    type KeyofObj = keyof Obj
-    type Tuple = { [K in KeyofObj]: [K, Obj[K]] }[KeyofObj]
-    return Object.entries(obj) as Tuple[]
+export type SqlQuery = {
+    sql: string
+    params: (string | number)[]
 }
 
-// generate raw SQL for a given query by replacing the placeholders with the values
+/**
+ * Generates a SQL string by replacing placeholders with the corresponding values
+ * @param {SqlQuery} sqlObject - An object containing the SQL string and its parameters
+ * @returns {string} The generated SQL string
+ */
 export const generateSQL = (sqlObject: {
     sql: string
     params: (string | number)[]
@@ -42,7 +43,23 @@ export const generateSQL = (sqlObject: {
     const { sql, params } = sqlObject
     let sqlString = sql
     params.forEach((param) => {
-        sqlString = sqlString.replace('?', `"${param}"`)
+        sqlString =
+            typeof param === 'string'
+                ? sqlString.replace('?', `"${param}"`)
+                : sqlString.replace('?', param.toString())
     })
     return sqlString
+}
+
+/**
+ * Type-safe Object.entries
+ * @param {Record<string, unknown>} obj - The object to convert
+ * @returns {Array<[string, unknown]>} An array of key-value tuples
+ */
+export const objectEntries = <Obj extends Record<string, unknown>>(
+    obj: Obj
+) => {
+    type KeyofObj = keyof Obj
+    type Tuple = { [K in KeyofObj]: [K, Obj[K]] }[KeyofObj]
+    return Object.entries(obj) as Tuple[]
 }

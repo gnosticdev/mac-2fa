@@ -3,6 +3,7 @@
     "private": true,
     "scripts": {
         "get-code": "bun run ./src/get2fa.ts",
+        "get-sql": "bun run ./src/get2fa.ts --raw",
         "build-binary": "bun build ./src/cli.ts --compile --outfile copy2fa"
     },
     "dependencies": {
