@@ -40,7 +40,11 @@ git clone https://github.com/ninxadev/mac-2fa.git && cd /path/to/mac-2fa
 bun run build-binary
 ```
 
-3.  use the newly created binary file inside a workflow app of your choosing - such as Automator, Shortcuts, Keyboard Maestro, etc.
+3.
+
+4. Use Automator/Keyboard Maestro to run the script
+
+    - See the [Usage: Automator Example](#usage-automator-example) section below for an example of how to use Automator to run the script.
 
 **\*IMPORTANT:** Whatever app you use will need Full Disk Access enabled - keep this in mind if you download Shortcuts from the internet...
 
@@ -57,14 +61,30 @@ add a `ignore.json` file to the root, and a `ignoredNumbers` property with an ar
 
 ## Usage: Automator Example
 
--   Create an Automator Quick Action, then add:
+1. create a macos app using the binary file.
+   <small>\*Note: This is so the binary runs in the same applicaiton context each time. Therefore you only need to grant Full Disk Access to the new app we create and can run from anywhere.</small>
 
-    -   `Run Shell Script` - Enter the path to the copy2fa binary file (`/path/to/copy2fa`)
-    -   `Set Value of Variable` - Set the variable to a name of your choosing (I used `2fa`)
-    -   `Copy to Clipboard` - This will copy the output of the shell script to your clipboard
-    -   `Display Notification` - Optional, but I like to know when it's done.
+    - Open Script Editor and create a new Applescript (in ~/Applications/Utilities)
+    - Paste the following code into the editor:
 
--   Set a keyboard shortcut in System Preferences > Keyboard > Shortcuts > Services
+        ```applescript
+        try
+        set result to do shell script "~/Coding/utilities/text-messages/copy2fa"
+
+            on error errMsg
+            display dialog "Pesky Error: " & errMsg with title "Script Error"
+            return
+            end try
+
+        set resultForNotification to result
+        set the clipboard to result
+        display notification resultForNotification & " copied!" with title "2FA"
+        ```
+
+    - Save the script: name it 2FA.app, and save as an Application (File > Save As > File Format: Application)
+    - Create an Automator Quick Action, and add "Launce Application" as the only action, and choose 2FA as the app to launch.
+
+-   Set a keyboard shortcut: Check the box in System Preferences > Keyboard > Shortcuts > Services > General > 2FA. Double click on the right side of the row and set a keyboard shortcut. I use Hyperkey + 2. ([can find here](https://hyperkey.app/))
 
 ## Other repos that are better than this one
 
