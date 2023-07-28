@@ -1,25 +1,38 @@
 import { drizzle, BunSQLiteDatabase } from 'drizzle-orm/bun-sqlite'
 import { Database } from 'bun:sqlite'
 import { message, handle } from './schema'
-import { eq, and, desc, sql, isNotNull, notInArray } from 'drizzle-orm'
+import { eq, and, desc, sql, isNotNull, notInArray, SQL } from 'drizzle-orm'
 import { parseAttributedBody } from './parse'
 import os from 'os'
 import { SqlQuery, generateSQL } from './utils'
 import ignore from '../ignore.json'
 
-// get first cli arg only (for now)
-const arg = process.argv
+// TODO: add cli args to get messages from a specific phone number
+const CLI_OPTIONS = ['raw', 'debug', 'use-all'] as const
+type Flag = (typeof CLI_OPTIONS)[number]
+
+// get flags and the values passed to them (if any)
+const flags = process.argv
     .slice(2)
-    .map((arg) => arg.replace('--', '').toLowerCase())?.[0] as FLAG | undefined
+    .filter((arg) => arg.startsWith('--')) // only get flags
+    .map((arg) => arg.replace('--', '')) as Flag[]
 
-// TODO: add cli args to get messages from a specific phone number
-type FLAG = 'raw' | 'debug'
+if (flags.length > 0 && flags.some((flag) => !CLI_OPTIONS.includes(flag))) {
+    throw new Error(
+        `Invalid flag(s) passed: ${flags.filter(
+            (flag) => !CLI_OPTIONS.includes(flag)
+        )}`
+    )
+}
+
+// ----------------- CLI ENTRY POINT -----------------
 // run the function and log the code to stdout
-const code = get2faCode(arg)
-console.log(code) // necessary for Automator or Keyboard Maestro to get the code
+const code = get2faCode(flags)
+console.log(code) // necessary for Automation App (e.g. Automator) to receive code
+// ----------------- END -----------------
 
 // TODO: add cli args to get messages from a specific phone number
-export function get2faCode(flag?: FLAG) {
+export function get2faCode(cliFlags?: Flag[]) {
     // Messages DB is located at ~/Library/Messages/chat.db always unless you've moved it
     const DB_PATH = os.homedir() + '/Library/Messages/chat.db'
     if (!DB_PATH) {
@@ -31,13 +44,15 @@ export function get2faCode(flag?: FLAG) {
 
     // ignore these phone numbers
     const ignoredNumbers = ignore.ignoredNumbers || []
-
+    const numbersQuery: SQL<string> | undefined = flags.includes('use-all')
+        ? undefined
+        : sql`length(${handle.id}) in (5,6)`
     // Selecting more columns than needed to make debugging easier
     const recentMessages = db
         .selectDistinct({
             date: sql<string>`cast(${message.date} AS TEXT)`,
             attributedBody: message.attributedBody, // almost all 2fa codes are found in this column
-            text: message.text,
+            text: message.text, // some 2fa codes are found in this column
             handleId: handle.rowid,
             phoneNumber: handle.id,
         })
@@ -46,7 +61,7 @@ export function get2faCode(flag?: FLAG) {
             and(
                 eq(message.service, 'SMS'), // 2fa codes are never sent via iMessage
                 isNotNull(message.attributedBody),
-                sql`length(${handle.id}) in (5,6)`,
+                numbersQuery,
                 notInArray(handle.id, ignoredNumbers)
             )
         )
@@ -55,13 +70,13 @@ export function get2faCode(flag?: FLAG) {
         .limit(10)
 
     // return the raw sql query
-    if (flag === 'raw') {
+    if (cliFlags?.includes('raw')) {
         return generateSQL(recentMessages.toSQL() as SqlQuery)
     }
 
     const results = recentMessages.all()
     // Send back debugger object if debug flag is passed
-    if (flag === 'debug') {
+    if (cliFlags?.includes('debug')) {
         return {
             query: generateSQL(recentMessages.toSQL() as SqlQuery),
             results: results.map((row) => ({

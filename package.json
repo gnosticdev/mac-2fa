@@ -1,10 +1,12 @@
 {
     "name": "2fa-messages-mac",
     "private": true,
+    "description": "Get 2FA codes on your Mac. If your iPhone is connected to the Messages App on your mac, this will look into your messages database - in readonly mode. Your messages are stored on your Mac hard drive at ~/Library/Messages/chat.db, feel free to explore this db to see how it stores different messages types. This package can also build a binary file that can be used to create a local app in under 5 minutes. The newly created app can be assigned to a keyboard shortcut or a Touch Bar button.",
     "scripts": {
         "get-code": "bun run ./src/get2fa.ts",
+        "debug": "bun run ./src/get2fa.ts --debug",
         "get-sql": "bun run ./src/get2fa.ts --raw",
-        "build-binary": "bun build ./src/cli.ts --compile --outfile copy2fa"
+        "build-binary": "bun build ./src/bin.ts --compile --outfile copy2fa.bin"
     },
     "dependencies": {
         "drizzle-orm": "^0.27.2"
@@ -12,9 +14,6 @@
     "devDependencies": {
         "bun-types": "^0.6.14"
     },
-    "trustedDependencies": [
-        "better-sqlite3"
-    ],
     "peerDependencies": {
         "typescript": "^5.0.0"
     }
